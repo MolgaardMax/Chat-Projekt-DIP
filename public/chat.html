@@ -3,9 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Chat</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    
+    <header class="site-header">
+  <div class="header-inner">
+    <a class="logo" href="/">💬 ChatServer</a>
+    <nav class="header-nav">
+      <span id="user-display" style="font-size:14px;color:#6b6a64;display:none"></span>
+      <button id="btn-logout" class="btn btn-outline" style="display:none">Log ud</button>
+      <a href="/" class="btn btn-outline">← Tilbage</a>
+    </nav>
+  </div>
+  <!-- Rediger besked modal -->
+  <div id="edit-msg-modal" class="modal" style="display:none">
+    <div class="modal-box">
+      <h2>Rediger besked</h2>
+      <input id="edit-msg-id" type="hidden">
+      <div class="form-group">
+        <label for="edit-msg-content">Besked</label>
+        <input id="edit-msg-content" type="text">
+      </div>
+      <div class="modal-actions">
+        <button id="btn-edit-msg-submit" class="btn btn-primary">Gem</button>
+        <button id="btn-edit-msg-cancel" class="btn btn-outline">Annuller</button>
+      </div>
+    </div>
+  </div>
+</header>
 </body>
 </html>
