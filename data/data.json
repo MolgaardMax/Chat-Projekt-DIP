@@ -1,0 +1,13 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "123",
+      "createdAt": "2026-04-08T10:00:00Z",
+      "level": 3
+    }
+  ],
+  "chats": [],
+  "messages": []
+}
