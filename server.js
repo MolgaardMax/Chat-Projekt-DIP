@@ -19,10 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({ secret: 'dip-secret', resave: false, saveUninitialized: false }));
 app.use(express.static('public')); // Denne linje fortæller Express, at den må læse filer fra 'public' mappen
 
-app.use((req, res, next) => {
-    console.log(`➡️ Browseren trykkede på noget! Modtog: ${req.method} anmodning til ${req.url}`);
-    next(); // Sender anmodningen videre i systemet
-});
+
 
 // Sæt Pug op (View engine)
 app.set('view engine', 'pug');

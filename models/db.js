@@ -21,6 +21,6 @@ export const saveData = () => {
     try {
         fs.writeFileSync(dataFilePath, JSON.stringify(db, null, 2));
     } catch (error) {
-        console.error("⚠️ Fejl ved gemning:", error.message);
+        console.error(" Fejl ved gemning:", error.message);
     }
 };
