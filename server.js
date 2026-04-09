@@ -1,17 +1,58 @@
-const port = 8000
-const express = require('express')
-const session = require('express-session');
-const fs = require('fs');
-const path = require('path');
-const { json } = require("node:stream/consumers");
-const server = express()
+// Fil: server.js
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import session from 'express-session';
 
-const pug = require('pug')
-server.set('view engine', 'pug')
+// Hent Model og Routes
+import { getDb } from './models/db.js';
+import userRoutes from './routes/userRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
 
-server.get('/', function(res,req){
-res.render('frontpage', {title: 'Chatserver', message: 'Chatserver'})
-})
+const app = express();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PORT = 3000;
 
-server.listen(port, ()=>{console.log('hey')})
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(session({ secret: 'dip-secret', resave: false, saveUninitialized: false }));
+app.use(express.static('public')); // Denne linje fortæller Express, at den må læse filer fra 'public' mappen
 
+app.use((req, res, next) => {
+    console.log(`➡️ Browseren trykkede på noget! Modtog: ${req.method} anmodning til ${req.url}`);
+    next(); // Sender anmodningen videre i systemet
+});
+
+// Sæt Pug op (View engine)
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
+// Hovedruten (Forsiden)
+app.get('/', (req, res) => {
+    const db = getDb();
+    
+    // Koip af chats med ownernames
+    const chatsWithNames = db.chats.map(chat => {
+        const owner = db.users.find(u => u.id === chat.ownerId);
+        return {
+            ...chat,
+            ownerName: owner ? owner.username : 'Ukendt'
+        };
+    });
+
+    res.render('index', {
+        currentUser: req.session.user,
+        users: db.users,
+        chats: chatsWithNames // Vi sender den nye liste med navne til Pug
+    });
+});
+
+// Forbind Ruterne
+app.use('/', userRoutes);
+app.use('/api/chats', chatRoutes);
+
+// Start!
+app.listen(PORT, () => {
+    console.log(`Server kører på http://localhost:${PORT}`);
+});

@@ -1,0 +1,122 @@
+/* Grundlæggende layout */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #92fff4;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.box {
+    background: rgb(215, 252, 247);
+    padding: 20px;  
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+}
+
+/* Admin sektion */
+.admin-box {
+    border-top: 5px solid #28a745;
+    background-color: #f8fff9;
+}
+
+/* Knapper */
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: opacity 0.2s;
+}
+
+.btn:hover { opacity: 0.8; }
+.btn-primary { background: #007bff; color: white; }
+.btn-success { background: #007bff; color: white; }
+.btn-danger { background: #dc3545; color: white; }
+
+/* Input felter */
+input[type="text"], input[type="password"], select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.input-group input { flex-grow: 1; }
+
+/* Chat og Beskeder */
+#chat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 6px;
+}
+
+#message-window {
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+#message-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    padding: 15px;
+    margin: 15px 0;
+    background: #fafafa;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 4px;
+}
+
+/* Talebobler */
+.message {
+    max-width: 70%;
+    padding: 8px 12px;
+    border-radius: 15px;
+    position: relative;
+    word-wrap: break-word;
+}
+
+.message.mine {
+    align-self: flex-end;
+    background-color: #007bff;
+    color: white;
+    border-bottom-right-radius: 2px;
+}
+
+.message.other {
+    align-self: flex-start;
+    background-color: #e9e9eb;
+    color: black;
+    border-bottom-left-radius: 2px;
+}
+
+.message-info {
+    display: block;
+    font-size: 0.7em;
+    margin-top: 4px;
+    opacity: 0.7;
+}

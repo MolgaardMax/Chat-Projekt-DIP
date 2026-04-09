@@ -1,0 +1,170 @@
+extends layout
+
+block content
+  //- 1. LOGIN / BRUGER INFO SEKTION
+  div.box
+    if currentUser
+      div(style="display: flex; justify-content: space-between; align-items: center;")
+        p Logget ind som: 
+          strong #{currentUser.username} 
+          span.badge(style="margin-left: 10px; padding: 2px 8px; background: #eee; border-radius: 10px; font-size: 0.8em;") Niveau: #{currentUser.level}
+        form(action="/logout" method="POST")
+          button.btn.btn-danger(type="submit") Log ud
+    else
+      div(style="display: flex; gap: 40px;")
+        div
+          h2 Log ind
+          form(action="/login" method="POST" style="display: flex; flex-direction: column; gap: 10px;")
+            input(type="text" name="username" placeholder="Brugernavn" required)
+            input(type="password" name="password" placeholder="Kodeord" required)
+            button.btn.btn-primary(type="submit") Log ind
+        
+        //- Opret bruger kolonne
+        div(style="border-left: 1px solid #ccc; padding-left: 40px;")
+          h2 Ny her? Opret bruger
+          form(action="/register" method="POST" style="display: flex; flex-direction: column; gap: 10px;")
+            input(type="text" name="username" placeholder="Vælg brugernavn" required)
+            input(type="password" name="password" placeholder="Vælg kodeord" required)
+            button.btn.btn-success(type="submit") Opret profil
+
+  //- 2. ADMIN
+  if currentUser && currentUser.level === 3
+    div.box.admin-box
+      h2 (Admin) Brugeroversigt
+      ul(style="list-style: none; padding: 0;")
+        each u in users
+          li(style="padding: 10px 0; border-bottom: 1px solid #c8e6c9; display: flex; justify-content: space-between; align-items: center;")
+            div
+              strong #{u.username} 
+              | (Lvl: #{u.level})
+              small(style="display: block; color: #666;") ID: #{u.id}
+            
+            if u.id !== currentUser.id
+              form(action=`/update-level/${u.id}` method="POST" style="display: flex; gap: 5px;")
+                select(name="newLevel")
+                  option(value="1" selected=u.level===1) Niveau 1
+                  option(value="2" selected=u.level===2) Niveau 2
+                  option(value="3" selected=u.level===3) Niveau 3
+                button.btn.btn-primary(type="submit" style="padding: 5px 10px;") Opdater
+
+  //- 3. OPRET CHAT
+  if currentUser && currentUser.level >= 2
+    div.box
+      h3 Opret ny chat
+      div.input-group
+        input#newChatName(type="text" placeholder="Navn på chatten...")
+        button#createChatBtn.btn.btn-primary Opret
+
+  //- 4. CHAT LISTEN
+  div.box
+    h2 Aktive chats
+    div#chat-list
+      if chats.length > 0
+        each chat in chats
+          div.chat-box(id=`chatbox-${chat.id}`)
+            div
+              h3(style="margin: 0;")= chat.name
+              small(style="color: #777;")
+              | Oprettet af: #{chat.ownerUsername || chat.ownerName || chat.ownerId} |  | Oprettet: #{new Date(chat.createdAt).toLocaleDateString()}
+            div(style="display: flex; gap: 10px;")
+              button.btn.btn-success.view-btn(data-id=chat.id data-name=chat.name) Se chat
+              if currentUser && (currentUser.level === 3 || (currentUser.level === 2 && chat.ownerId === currentUser.id))
+                button.btn.btn-danger.delete-btn(data-id=chat.id) Slet chat
+      else
+        p#no-chats-msg Ingen chats fundet.
+
+  //- 5. BESKED VINDUE
+  div#message-window.box(style="display: none;")
+    div(style="display: flex; justify-content: space-between; align-items: center;")
+      h2#current-chat-name Chat
+      button.btn(onclick="document.getElementById('message-window').style.display='none'") Luk ✕
+    
+    div#message-list
+    
+    if currentUser
+      div.input-group
+        input#msgInput(type="text" placeholder="Skriv din besked her...")
+        button#sendMsgBtn.btn.btn-primary Send
+    else
+      p.text-center Log ind for at skrive beskeder.
+
+  script.
+    let activeChatId = null;
+    const currentUserId = "#{currentUser ? currentUser.id : ''}";
+
+    // OPRET CHAT
+    const createBtn = document.getElementById('createChatBtn');
+    if (createBtn) {
+      createBtn.addEventListener('click', async () => {
+        const nameInput = document.getElementById('newChatName');
+        if (!nameInput.value.trim()) return;
+        const response = await fetch('/api/chats', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: nameInput.value })
+        });
+        if (response.ok) window.location.reload();
+      });
+    }
+
+    // CHAT LISTE EVENTS 
+    document.getElementById('chat-list').addEventListener('click', async (e) => {
+      // Slet
+      if (e.target.classList.contains('delete-btn')) {
+        const id = e.target.getAttribute('data-id');
+        if (!confirm("Vil du slette denne chat?")) return;
+        const response = await fetch(`/api/chats/${id}`, { method: 'DELETE' });
+        if (response.ok) document.getElementById(`chatbox-${id}`).remove();
+      }
+      // Se chat
+      if (e.target.classList.contains('view-btn')) {
+        activeChatId = e.target.getAttribute('data-id');
+        const chatName = e.target.getAttribute('data-name');
+        const response = await fetch(`/api/chats/${activeChatId}/messages`);
+        const messages = await response.json();
+        
+        document.getElementById('message-window').style.display = 'flex';
+        document.getElementById('current-chat-name').innerText = chatName;
+        
+        const list = document.getElementById('message-list');
+        list.innerHTML = '';
+        messages.forEach(m => appendMessage(m));
+        list.scrollTop = list.scrollHeight;
+      }
+    });
+
+    // SEND BESKED
+    const sendMsgBtn = document.getElementById('sendMsgBtn');
+    if (sendMsgBtn) {
+      sendMsgBtn.addEventListener('click', async () => {
+        const input = document.getElementById('msgInput');
+        const content = input.value.trim();
+        if (!content || !activeChatId) return;
+        const response = await fetch(`/api/chats/${activeChatId}/messages`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content })
+        });
+        if (response.ok) {
+          const m = await response.json();
+          appendMessage(m);
+          input.value = '';
+          const list = document.getElementById('message-list');
+          list.scrollTop = list.scrollHeight;
+        }
+      });
+    }
+
+    // HJÆLPEFUNKTION TIL BESKEDER
+    function appendMessage(m) {
+      const list = document.getElementById('message-list');
+      const div = document.createElement('div');
+      const isMine = m.ownerId === currentUserId;
+      div.className = `message ${isMine ? 'mine' : 'other'}`;
+      div.innerHTML = `
+        <strong style="font-size: 0.8em;">${m.ownerName || 'Ukendt'}</strong><br>
+        ${m.content}
+        <span class="message-info">${new Date(m.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+      `;
+      list.appendChild(div);
+    }

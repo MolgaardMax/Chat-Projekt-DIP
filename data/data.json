@@ -20,6 +20,27 @@
       "password": "laaser123",
       "createdAt": "2025-01-03T10:00:00.000Z",
       "level": 1
+    },
+    {
+      "id": "u1775722708307",
+      "username": "hej",
+      "password": "niels",
+      "level": 1,
+      "createdAt": "2026-04-09T08:18:28.307Z"
+    },
+    {
+      "id": "u1775722790801",
+      "username": "lineal",
+      "password": "l1234",
+      "level": 3,
+      "createdAt": "2026-04-09T08:19:50.801Z"
+    },
+    {
+      "id": "u1775722979473",
+      "username": "thomas",
+      "password": "1",
+      "level": 3,
+      "createdAt": "2026-04-09T08:22:59.473Z"
     }
   ],
   "chats": [
@@ -49,6 +70,23 @@
           "createdAt": "2026-04-07T07:35:52.467Z",
           "ownerId": "u1",
           "chatId": "c1"
+        },
+        {
+          "content": "asd",
+          "ownerId": "u1",
+          "createdAt": "2026-04-09T08:24:05.222Z"
+        },
+        {
+          "content": "Hey det er niels",
+          "ownerId": "u1775722708307",
+          "createdAt": "2026-04-09T08:24:24.644Z"
+        },
+        {
+          "id": "m1775723828004",
+          "content": "a",
+          "ownerId": "u1775722790801",
+          "ownerName": "lineal",
+          "createdAt": "2026-04-09T08:37:08.004Z"
         }
       ]
     },
@@ -71,8 +109,87 @@
           "createdAt": "2026-04-07T07:36:07.055Z",
           "ownerId": "u1",
           "chatId": "c2"
+        },
+        {
+          "content": "asd",
+          "ownerId": "u1",
+          "createdAt": "2026-04-09T08:18:14.249Z"
+        },
+        {
+          "content": "a",
+          "ownerId": "u1775722790801",
+          "createdAt": "2026-04-09T08:20:03.123Z"
+        },
+        {
+          "id": "m1775723834113",
+          "content": "asd",
+          "ownerId": "u1",
+          "ownerName": "admin",
+          "createdAt": "2026-04-09T08:37:14.113Z"
+        },
+        {
+          "id": "m1775724033621",
+          "content": "a",
+          "ownerId": "u1775722790801",
+          "ownerName": "lineal",
+          "createdAt": "2026-04-09T08:40:33.621Z"
+        },
+        {
+          "id": "m1775724035123",
+          "content": "a",
+          "ownerId": "u1775722790801",
+          "ownerName": "lineal",
+          "createdAt": "2026-04-09T08:40:35.123Z"
+        },
+        {
+          "id": "m1775724035329",
+          "content": "a",
+          "ownerId": "u1775722790801",
+          "ownerName": "lineal",
+          "createdAt": "2026-04-09T08:40:35.329Z"
+        },
+        {
+          "id": "m1775724035485",
+          "content": "a",
+          "ownerId": "u1775722790801",
+          "ownerName": "lineal",
+          "createdAt": "2026-04-09T08:40:35.485Z"
+        },
+        {
+          "id": "m1775724035676",
+          "content": "a",
+          "ownerId": "u1775722790801",
+          "ownerName": "lineal",
+          "createdAt": "2026-04-09T08:40:35.676Z"
         }
       ]
+    },
+    {
+      "id": "c1775723059261",
+      "name": "fest på lørdag!",
+      "ownerId": "u1775722979473",
+      "messages": [
+        {
+          "content": "Kære alle. Jeg vil gerne inviterer til fest på lørdag. I er velkommen fra klokken 16:00 på lortevej 67, 6969 sixnineby. Glæder mig til at se jer! SU senest idag",
+          "ownerId": "u1775722979473",
+          "createdAt": "2026-04-09T08:25:33.410Z"
+        },
+        {
+          "id": "m1775724111758",
+          "content": "fedest mand!",
+          "ownerId": "u1775722790801",
+          "ownerName": "lineal",
+          "createdAt": "2026-04-09T08:41:51.758Z"
+        }
+      ],
+      "createdAt": "2026-04-09T08:24:19.261Z"
+    },
+    {
+      "id": "c1775725919165",
+      "name": "saggin",
+      "ownerId": "u1775722790801",
+      "messages": [],
+      "createdAt": "2026-04-09T09:11:59.170Z"
     }
   ]
 }
